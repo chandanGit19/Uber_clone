@@ -1,7 +1,7 @@
 import express from "express";
 const userRoutes = express.Router();
 import {body} from "express-validator"
-import { getProfile, loginUser, resgisterUser } from "../controllers/userControllers.js";
+import { getProfile, loginUser, logout, resgisterUser } from "../controllers/userControllers.js";
 import { authUser } from "../middelwares/authMiddelware.js";
 
 
@@ -18,7 +18,9 @@ userRoutes.post("/login",[
 loginUser
 )
 
-userRoutes.get("/profile",authUser,getProfile)
+userRoutes.get("/profile",authUser,getProfile);
+
+userRoutes.get("/logout",authUser,logout)
 
 
 

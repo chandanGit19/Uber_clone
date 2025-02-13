@@ -1,7 +1,10 @@
 import express from "express";
 import userRoutes from "./routes/userRoutes.js";
+import captionRoute from "./routes/captionRoutes.js";
 import cors from "cors"
 import cookieParser from "cookie-parser";
+import mapRouter from "./routes/mapRouter.js";
+import rideRoute from "./routes/rideRoutes.js";
  const app = express();
 
 
@@ -17,7 +20,11 @@ app.use(cookieParser());
     })
  })
 
+
  app.use("/user",userRoutes);
+ app.use("/caption",captionRoute)
+ app.use("/map",mapRouter);
+ app.use("/ride",rideRoute)
 
 
 

@@ -1,3 +1,4 @@
+import blackListToken from "../models/blacklistedToken.js";
 import userModel from "../models/userModel.js";
 import {  validationResult } from "express-validator";
 
@@ -77,6 +78,8 @@ export const resgisterUser =async(req,res,next)=>{
 
 
 export const loginUser =async(req,res)=>{
+
+    // console.log("here")
  try {
     const error =validationResult(req);
     if(!error.isEmpty()){
@@ -86,6 +89,16 @@ export const loginUser =async(req,res)=>{
     }
 
     const {email ,password} = req.body;
+
+    // console.log(email,password)
+
+    if(!email || !password){
+        return res.status(400).json({
+            success:false,
+            message:"all fields are requires"
+        })
+
+    }
 
     const exUser = await userModel.findOne({email}).select('+password')
 
@@ -113,14 +126,10 @@ export const loginUser =async(req,res)=>{
         token
     })
 
-
-
-
  } catch (error) {
     console.log("error in login");
     console.log(error)
  }
-
 
 }
 
@@ -144,4 +153,27 @@ export const getProfile =async(req,res)=>{
         console.log("error in getProfile")
         console.log(error)
     }
+}
+
+
+export const logout = async(req,res)=>{
+    try {
+        
+        const token = req.cookies.token || req.header("authorization").replace("bearer ","");
+
+         await blackListToken.create({
+            token
+        })
+
+        res.clearCookie('token').status(200).json({
+            success:true,
+            message:"logout sucessfull"
+        })
+
+    } catch (error) {
+        console.log("error in logout ");
+        console.log(error)
+        
+    }
+        
 }
